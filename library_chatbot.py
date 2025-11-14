@@ -81,14 +81,14 @@ def initialize_components(selected_model):
     )
 
     # 질문-답변 시스템 프롬프트
-qa_system_prompt = """
-You are an assistant for question-answering tasks.
-Use the retrieved context to answer the question.
-If you don't know the answer, just say that you don't know.
+    qa_system_prompt = """
+    You are an assistant for question-answering tasks.
+    Use the retrieved context to answer the question.
+    If you don't know the answer, just say that you don't know.
 
-Please answer in natural English without using emojis.
-Use a friendly and conversational tone.
-"""
+    Please answer in natural English without using emojis.
+    Use a friendly and conversational tone.
+    """
 
     {context}"""
     qa_prompt = ChatPromptTemplate.from_messages(
@@ -142,4 +142,5 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
 
