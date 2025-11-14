@@ -62,7 +62,7 @@ def get_vectorstore(_docs):
 # PDF 문서 로드-벡터 DB 저장-검색기-히스토리 모두 합친 Chain 구축
 @st.cache_resource
 def initialize_components(selected_model):
-    file_path = r"/mount/src/library_chatbot/[챗봇프로그램및실습] 부경대학교 규정집.pdf"
+    file_path = r"https://eid.dyu.ac.kr/wp-content/uploads/sites/35/kboard_temp/6916fb36025c9/%EC%83%9D%ED%99%9C-%EC%98%81%EC%96%B4%ED%9A%8C%ED%99%94-%ED%8C%A8%ED%84%B4-(100%EA%B0%80%EC%A7%80)-%EC%9E%90%EB%A3%8C.pdf"
     pages = load_and_split_pdf(file_path)
     vectorstore = get_vectorstore(pages)
     retriever = vectorstore.as_retriever()
@@ -81,11 +81,14 @@ def initialize_components(selected_model):
     )
 
     # 질문-답변 시스템 프롬프트
-    qa_system_prompt = """You are an assistant for question-answering tasks. \
-    Use the following pieces of retrieved context to answer the question. \
-    If you don't know the answer, just say that you don't know. \
-    Keep the answer perfect. please use imogi with the answer.
-    대답은 한국어로 하고, 존댓말을 써줘.\
+qa_system_prompt = """
+You are an assistant for question-answering tasks.
+Use the retrieved context to answer the question.
+If you don't know the answer, just say that you don't know.
+
+Please answer in natural English without using emojis.
+Use a friendly and conversational tone.
+"""
 
     {context}"""
     qa_prompt = ChatPromptTemplate.from_messages(
@@ -103,7 +106,7 @@ def initialize_components(selected_model):
     return rag_chain
 
 # Streamlit UI
-st.header("국립부경대 도서관 규정 Q&A 챗봇 💬 📚")
+st.header("영어 회화")
 option = st.selectbox("Select GPT Model", ("gpt-4o-mini", "gpt-3.5-turbo-0125"))
 rag_chain = initialize_components(option)
 chat_history = StreamlitChatMessageHistory(key="chat_messages")
@@ -119,7 +122,7 @@ conversational_rag_chain = RunnableWithMessageHistory(
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", 
-                                     "content": "국립부경대 도서관 규정에 대해 무엇이든 물어보세요!"}]
+                                     "content": "영어 대화를 시작하세요!"}]
 
 for msg in chat_history.messages:
     st.chat_message(msg.type).write(msg.content)
@@ -139,3 +142,4 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
