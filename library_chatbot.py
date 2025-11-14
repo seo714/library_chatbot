@@ -62,7 +62,7 @@ def get_vectorstore(_docs):
 # PDF 문서 로드-벡터 DB 저장-검색기-히스토리 모두 합친 Chain 구축
 @st.cache_resource
 def initialize_components(selected_model):
-    file_path = r"https://eid.dyu.ac.kr/wp-content/uploads/sites/35/kboard_temp/6916fb36025c9/%EC%83%9D%ED%99%9C-%EC%98%81%EC%96%B4%ED%9A%8C%ED%99%94-%ED%8C%A8%ED%84%B4-(100%EA%B0%80%EC%A7%80)-%EC%9E%90%EB%A3%8C.pdf"
+    file_path = r"/mount/src/library_chatbot/englishghlghk.pdf"
     pages = load_and_split_pdf(file_path)
     vectorstore = get_vectorstore(pages)
     retriever = vectorstore.as_retriever()
@@ -141,4 +141,5 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
 
