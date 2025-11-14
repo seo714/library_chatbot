@@ -88,6 +88,7 @@ def initialize_components(selected_model):
 
     Please answer in natural English without using emojis.
     Use a friendly and conversational tone.
+    Speak only English, no Korean
 
     {context}"""
     qa_prompt = ChatPromptTemplate.from_messages(
@@ -141,5 +142,6 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
 
 
